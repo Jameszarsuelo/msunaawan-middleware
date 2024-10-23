@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\SharePointService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class SharePointController extends Controller
 {
@@ -52,8 +53,33 @@ class SharePointController extends Controller
 
         $id = $request->input('id');
 
+        $filename = $id . '.jpg';
+
+        $path = storage_path("app/public/mapImages/{$filename}");
+
+        if (file_exists($path)) {
+            return response()->file($path, [
+                'Content-Type' => 'image/jpeg',
+                'Content-Disposition' => 'inline; filename="' . $filename . '"'
+            ]);
+        }
+
         $response = Http::get("https://drive.google.com/uc?export=download&id=$id");
 
-        return response($response->body(), 200)->header('Content-Type', 'image/jpeg');
+        if ($response->successful()) {
+
+            Storage::disk('public')->put("mapImages/{$filename}", $response->body());
+
+            if (!file_exists($path)) {
+                return response()->json(['error' => 'File could not be saved'], 500);
+            }
+
+            return response()->file($path, [
+                'Content-Type' => 'image/jpeg',
+                'Content-Disposition' => 'inline; filename="' . $filename . '"'
+            ]);
+        }
+
+        return response()->json(['error' => 'Unable to download image'], 500);
     }
 }
