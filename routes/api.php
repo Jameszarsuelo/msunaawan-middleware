@@ -10,3 +10,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('getMapLists', [SharePointController::class, 'getData']);
 Route::post('getImageFromDrive', [SharePointController::class, 'getImageFromDrive']);
+Route::post('getImageFromSharepoint', [SharePointController::class, 'getImageFromSharepoint']);
