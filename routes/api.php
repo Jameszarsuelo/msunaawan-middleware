@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::get('getMapLists', [SharePointController::class, 'getData']);
+Route::post('getMapLists', [SharePointController::class, 'getData']);
 Route::post('getImageFromDrive', [SharePointController::class, 'getImageFromDrive']);
 Route::post('getImageFromSharepoint', [SharePointController::class, 'getImageFromSharepoint']);

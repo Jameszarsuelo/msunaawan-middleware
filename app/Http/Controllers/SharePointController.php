@@ -18,18 +18,23 @@ class SharePointController extends Controller
 
     public function getData(Request $request)
     {
-        // Assume you have the refresh token stored in your application
+
+        $baseUrl = $request->input('baseUrl');
+        $queryParams = $request->input('queryParams');
+
+        $queryString = http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
+
+        $sharepointUrl = "{$baseUrl}?{$queryString}";
+
         $refreshToken = '0.AcYA2Ybh53anlE-ZmSRHCzlhrpKUvQPJ0oJJqQ7psS-om43GADA.AgABAwEAAADW6jl31mB3T7ugrWTT8pFeAwDs_wUA9P_gExjN0A-EP5tcW_8TQS3Vv418AIpe_HLou4t9SDdC44FGN9NDLLZ0d-du3QSdbdqs6qswrgcKPj1WLq-t9VQ_7ndz_lgWHqcD-jOOGKi4L1WWOk9Dao7OKCtd0hQlYzqD8-8TdWiUNPT1gmr6od1Adp8Z2mWOpZD8xcV3NJylJsw5z74v5iOkMFhQBVkawfRkTgbKSjT3dY_2VNfliuJZFvDfVHd2oOyJLctwl3moOxUi8vxDkqEH98hXn9c-bRuM6jorRsqjrERD5k6gOnx7G-WChURZLSkytLwBRH5RyrJTSJpQBz4n-mps6ZD-6C5trZ8k-gPIpjkL3wKq6C610e2o3nCrpN9Igk-f5yTwdOqrBULtdxhwDqqxrBrBA4rFf0hDWEc7srqNw186urxH771giDvCQd_5L4UEQed9m5qCiHvXVdn4Z53UqZ4ec4Ha-f36q4XSyrCP84XTig7HjLKHROW0oDszigBpWuCP41q9lgA6sXWGyenM2PVkFAJzsMEJsxXUxTiRPCoiM4vgZLrvLhWOTcKIbSEGcGIiDXWVflI2uKZ4gRDjJzJMviVi0JqGYF1SsGo7LwZL3A87f3riL0qUq1qqdLnh91a9A7ovJPdDaTYP-CwEOVLFTx9eysNUG6TVe570YEq-lKawCy95NKXiQCQUxS0z4u_pArD80Ch6jIR_Os0F8OKw_rbadT70MnmXMrL5fvHZzswn28eSyNjDumDJveOxN8cJ6OztnkNPRwmck7JDgdzcKHtEnqJuUeQWFNufpF4mCZAT5A'; // You should retrieve this from your storage
 
-        // Get the access token
         $tokens = $this->sharePointService->getAccessToken($refreshToken);
 
         if (isset($tokens['error'])) {
             return response()->json(['error' => $tokens['error']], 500);
         }
 
-        // Fetch data using the access token
-        $data = $this->sharePointService->fetchData($tokens['access_token']);
+        $data = $this->sharePointService->fetchData($tokens['access_token'], $sharepointUrl);
 
         if (isset($data['error'])) {
             return response()->json(['error' => $data['error']], 500);
@@ -40,49 +45,42 @@ class SharePointController extends Controller
 
     // public function getImageFromDrive(Request $request)
     // {
-    //     return $request;
-    //     // $response = Http::get("https://drive.google.com/uc?export=download&id=$id");
-    //     // return response($response->body(), 200)->header('Content-Type', 'image/jpeg');
+    //     $request->validate([
+    //         'id' => 'required|string',
+    //     ]);
+
+    //     $id = $request->input('id');
+
+    //     $filename = $id . '.jpg';
+
+    //     $path = storage_path("app/public/mapImages/{$filename}");
+
+    //     if (file_exists($path)) {
+    //         return response()->file($path, [
+    //             'Content-Type' => 'image/jpeg',
+    //             'Content-Disposition' => 'inline; filename="' . $filename . '"'
+    //         ]);
+    //     }
+
+    //     $response = Http::get("https://drive.google.com/uc?export=download&id=$id");
+
+    //     if ($response->successful()) {
+
+    //         Storage::disk('public')->put("mapImages/{$filename}", $response->body());
+
+    //         if (!file_exists($path)) {
+    //             return response()->json(['error' => 'File could not be saved'], 500);
+    //         }
+
+    //         // return response()->file($path, [
+    //         //     'Content-Type' => 'image/jpeg',
+    //         //     'Content-Disposition' => 'inline; filename="' . $filename . '"'
+    //         // ]);
+    //         return response($response->body(), 200)->header('Content-Type', 'image/jpeg');
+    //     }
+
+    //     return response()->json(['error' => 'Unable to download image'], 500);
     // }
-
-    public function getImageFromDrive(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|string',
-        ]);
-
-        $id = $request->input('id');
-
-        $filename = $id . '.jpg';
-
-        $path = storage_path("app/public/mapImages/{$filename}");
-
-        if (file_exists($path)) {
-            return response()->file($path, [
-                'Content-Type' => 'image/jpeg',
-                'Content-Disposition' => 'inline; filename="' . $filename . '"'
-            ]);
-        }
-
-        $response = Http::get("https://drive.google.com/uc?export=download&id=$id");
-
-        if ($response->successful()) {
-
-            Storage::disk('public')->put("mapImages/{$filename}", $response->body());
-
-            if (!file_exists($path)) {
-                return response()->json(['error' => 'File could not be saved'], 500);
-            }
-
-            // return response()->file($path, [
-            //     'Content-Type' => 'image/jpeg',
-            //     'Content-Disposition' => 'inline; filename="' . $filename . '"'
-            // ]);
-            return response($response->body(), 200)->header('Content-Type', 'image/jpeg');
-        }
-
-        return response()->json(['error' => 'Unable to download image'], 500);
-    }
 
     public function getImageFromSharepoint(Request $request)
     {
@@ -92,13 +90,16 @@ class SharePointController extends Controller
         ]);
 
         $id = $request->input('id');
+        $imagePath = $request->input('imagePath');
+
+        $url = "{$imagePath}{$id}";
 
         $path = storage_path("app/public/mapImages/{$id}");
 
         if (file_exists($path)) {
             return response()->file($path, [
                 'Content-Type' => 'image/jpeg',
-                'Content-Disposition' => 'inline; filename="' . $id . '"'
+                'Content-Disposition' => "inline; filename='{$id}'"
             ]);
         }
 
@@ -115,7 +116,7 @@ class SharePointController extends Controller
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$tokens['access_token']}", // Add your access token
             'Accept' => 'application/json',
-        ])->get("https://msuatnaawan.sharepoint.com/_api/web/GetFileByServerRelativeUrl('/Shared Documents/Building Images/$id')/\$value");
+        ])->get("https://msuatnaawan.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value");
 
         if ($response->successful()) {
 

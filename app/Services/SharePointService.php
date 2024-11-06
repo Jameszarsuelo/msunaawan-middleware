@@ -43,10 +43,10 @@ class SharePointService
         }
     }
 
-    public function fetchData($accessToken)
+    public function fetchData($accessToken, $sharepointUrl)
     {
         try {
-            $response = $this->client->get("https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('MSUNaawanBuildings')/items?\$select=Title,Latitude,Longitude,Description,Pictures,Status,Coordinates,is_deleted,ContactNumber,EmailAddress&\$filter=is_deleted eq 0", [
+            $response = $this->client->get($sharepointUrl, [
                 'headers' => [
                     'Authorization' => "Bearer {$accessToken}",
                     'Accept' => 'application/json;odata=verbose',
