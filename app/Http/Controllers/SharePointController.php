@@ -142,6 +142,47 @@ class SharePointController extends Controller
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
         $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,EventListName";
 
+        $result = $this->sharepointData($sharepointUrl);
+
+        return response()->json($result['d']['results']);
+
+    }
+
+    public function getNews()
+    {
+        // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('News')/items?&\$select=Title,Description,ImageURL,Created";
+
+        $result = $this->sharepointData($sharepointUrl);
+
+        return response()->json($result['d']['results']);
+
+    }
+
+    public function getAnnouncements()
+    {
+        // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Announcements')/items?&\$select=Title,Description,ImageURL,Created";
+
+        $result = $this->sharepointData($sharepointUrl);
+
+        return response()->json($result['d']['results']);
+
+    }
+
+    public function getResearch()
+    {
+        // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Research')/items?&\$select=Title,Description,ImageURL,Created";
+
+        $result = $this->sharepointData($sharepointUrl);
+
+        return response()->json($result['d']['results']);
+
+    }
+
+    public function sharepointData($sharepointUrl)
+    {
         $refreshToken = $this->refreshToken;
 
         $tokens = $this->sharePointService->getAccessToken($refreshToken);
@@ -156,6 +197,6 @@ class SharePointController extends Controller
             return response()->json(['error' => $data['error']], 500);
         }
 
-        return response()->json($data['d']['results']);
+        return $data;
     }
 }
