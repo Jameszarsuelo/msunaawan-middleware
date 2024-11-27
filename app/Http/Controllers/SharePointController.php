@@ -140,7 +140,7 @@ class SharePointController extends Controller
     public function getEvents()
     {
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,EventListName";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,EventListName&\$filter=DisplayToPublic eq 1";
 
         $result = $this->sharepointData($sharepointUrl);
 
@@ -151,7 +151,7 @@ class SharePointController extends Controller
     public function getNews()
     {
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('News')/items?&\$select=Title,Description,ImageURL,Created,ItemLink";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('News')/items?&\$select=Title,Description,ImageURL,Created,ItemLink&\$filter=DisplayToPublic eq 1";
 
         $result = $this->sharepointData($sharepointUrl);
 
@@ -162,7 +162,7 @@ class SharePointController extends Controller
     public function getAnnouncements()
     {
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Announcements')/items?&\$select=Title,Description,ImageURL,Created,ItemLink";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Announcements')/items?&\$select=Title,Description,ImageURL,Created,ItemLink&\$filter=DisplayToPublic eq 1";
 
         $result = $this->sharepointData($sharepointUrl);
 
@@ -173,7 +173,7 @@ class SharePointController extends Controller
     public function getResearch()
     {
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Research')/items?&\$select=Title,Description,ImageURL,Created,ItemLink";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Research')/items?&\$select=Title,Description,ImageURL,Created,ItemLink&\$filter=DisplayToPublic eq 1";
 
         $result = $this->sharepointData($sharepointUrl);
 
