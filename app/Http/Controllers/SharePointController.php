@@ -140,7 +140,7 @@ class SharePointController extends Controller
     public function getEvents()
     {
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,EventListName&\$filter=DisplayToPublic eq 1";
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,BodyText,WPLink,EventListName&\$filter=DisplayToPublic eq 1";
 
         $result = $this->sharepointData($sharepointUrl);
 
