@@ -24,7 +24,8 @@ class SharePointController extends Controller
         $baseUrl = $request->input('baseUrl');
         $queryParams = $request->input('queryParams');
 
-        $queryString = http_build_query($queryParams, '', '&', PHP_QUERY_RFC3986);
+        $queryString = http_build_query($queryParams, '', '&$', PHP_QUERY_RFC3986);
+        // $replaceString = str_replace("\/", '/', $queryString);
 
         $sharepointUrl = "{$baseUrl}?{$queryString}";
 
