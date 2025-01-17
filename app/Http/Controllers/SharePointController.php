@@ -182,6 +182,17 @@ class SharePointController extends Controller
 
     }
 
+    public function getUsers()
+    {
+        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/siteusers";
+
+        $result = $this->sharepointData($sharepointUrl);
+
+        // return response()->json($result['d']['results']);
+        return response()->json($result['d']['results']);
+
+    }
+
     public function sharepointData($sharepointUrl)
     {
         $refreshToken = $this->refreshToken;
