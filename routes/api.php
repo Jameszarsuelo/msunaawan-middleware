@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::post('getMapLists', [SharePointController::class, 'getData']);
+Route::post('getData', [SharePointController::class, 'getData']);
 Route::get('getEvents', [SharePointController::class, 'getEvents']);
 Route::get('getNews', [SharePointController::class, 'getNews']);
 Route::get('getAnnouncements', [SharePointController::class, 'getAnnouncements']);

@@ -8,18 +8,30 @@ use GuzzleHttp\Exception\RequestException;
 class SharePointService
 {
     protected $client;
-    protected $tenantId = 'e7e186d9-a776-4f94-9999-24470b3961ae';
-    protected $clientId = '03bd9492-d2c9-4982-a90e-e9b12fa89b8d';
-    protected $clientSecret = 'zns8Q~dWaaqufTSzdfE8JPEsP4SiNu6WDazoxdhD';
-    protected $scope = 'https://msuatnaawan.sharepoint.com/.default offline_access';
+    protected $tenantId;
+    protected $clientId;
+    protected $clientSecret;
+    protected $scope;
 
     public function __construct()
     {
         $this->client = new Client();
     }
 
-    public function getAccessToken($refreshToken)
+    public function getAccessToken($refreshToken, $baseUrl = null)
     {
+        if (strpos($baseUrl, 'msugensan2.sharepoint.com') !== false) {
+            $this->tenantId = env('GENSAN_SHAREPOINT_TENANT_ID');
+            $this->clientId = env('GENSAN_SHAREPOINT_CLIENT_ID');
+            $this->clientSecret = env('GENSAN_SHAREPOINT_CLIENT_SECRET');
+            $this->scope = env('GENSAN_SHAREPOINT_SCOPE');
+        } else {
+            $this->tenantId = env('NAAWAN_SHAREPOINT_TENANT_ID');
+            $this->clientId = env('NAAWAN_SHAREPOINT_CLIENT_ID');
+            $this->clientSecret = env('NAAWAN_SHAREPOINT_CLIENT_SECRET');
+            $this->scope = env('NAAWAN_SHAREPOINT_SCOPE');
+        }
+
         try {
             $response = $this->client->post("https://login.microsoftonline.com/{$this->tenantId}/oauth2/v2.0/token", [
                 'form_params' => [

@@ -11,7 +11,7 @@ class SharePointController extends Controller
 {
     protected $sharePointService;
 
-    protected $refreshToken = '1.AcYA2Ybh53anlE-ZmSRHCzlhrpKUvQPJ0oJJqQ7psS-om43GAG_GAA.AgABAwEAAADW6jl31mB3T7ugrWTT8pFeAwDs_wUA9P9NIQfNcJ_JI6yuUhz5TQidC_iBWX3QWBeZ-XVip6CYuWbTx1m0xqq3X0ssrto75Olw7owg8azpyXXfhtDICsL7UA-Gt0akBC6xS6sfGWTZiyLtmV5aI_MhINACf9lTsn2RjoRdBUm8Zub0mHUIRQ0O2wNZfA_0t0exsN4BbmzLq3BbqtbXP6Z77DYoc8Nb_jEh42c7ECOsRhQlA7dYvdDaJQCwriS-chTwXE4Ur9mRfsXh7SSE-iihDEs0W7YyZNgzd6sm6Y0SHosueFgbIao4oVQl3edhQe1EWUBslTwGjcIUMWPFQa60edaUhrCjtEzOcBtE8DRBbdhcUijgb_e7O2MoT7yB5fWQd3G5hPD2JiHwAuw0zJqzrdMMElHpDJ7tbTa3mVdsmoPTJajL3OWZNMkdnBFlCd2j5SxjXlrfLhLwS2GyvGchzojdedkLbrzN1QH6riYOX_RG8bf-quTbu0betAohGDURw0fHg6SzVh7SbWhz-CnhdZrqtjwXtPxWRaVR4nKHFBIJlRgM47CMgoQ_XsmMHZFPzDi6f6tNHp83_p0no9FDWLg_0t-eSDJw_m2MB6ga4H5qrvVUmAIczxtueXkDQd3ef3ChBcI8YA2DFq1Via01dF8YidsSz2u9NV9dgYRI5dGzYcFXgwhvGgPS9bR5jUroCK9IMsEOmDJX4t10fd5w0JUKaxp6_YEiZq13OfDQa3x3Jq76tocnY5oO7wkLfyU-MCr6b-6BNu5vH4r3y6G0HWjQpHrgyeBLjp3LJ3lz9tbokrdk-uszKnLI_QIx91K1laGn2C3OWMGLrg';
+    protected $refreshToken;
 
     public function __construct(SharePointService $sharePointService)
     {
@@ -22,18 +22,27 @@ class SharePointController extends Controller
     {
 
         $baseUrl = $request->input('baseUrl');
+
         $queryParams = $request->input('queryParams');
 
         $queryString = http_build_query($queryParams, '', '&$', PHP_QUERY_RFC3986);
         // $replaceString = str_replace("\/", '/', $queryString);
 
+
         $sharepointUrl = "{$baseUrl}?{$queryString}";
 
         // return $sharepointUrl;
 
+        if (strpos($baseUrl, 'msuatnaawan.sharepoint.com') !== false) {
+            $this->refreshToken = env('NAAWAN_SHAREPOINT_REFRESH_TOKEN');
+        } else if (strpos($baseUrl, 'msugensan2.sharepoint.com') !== false) {
+            $this->refreshToken = env('GENSAN_SHAREPOINT_REFRESH_TOKEN');
+        }
+
         $refreshToken = $this->refreshToken;
 
-        $tokens = $this->sharePointService->getAccessToken($refreshToken);
+        $tokens = $this->sharePointService->getAccessToken($refreshToken, $baseUrl);
+
 
         if (isset($tokens['error'])) {
             return response()->json(['error' => $tokens['error']], 500);
