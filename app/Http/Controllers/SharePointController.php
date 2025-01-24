@@ -29,7 +29,7 @@ class SharePointController extends Controller
         // $replaceString = str_replace("\/", '/', $queryString);
 
 
-        $sharepointUrl = "{$baseUrl}?{$queryString}";
+        $sharepointUrl = "{$baseUrl}?\${$queryString}";
 
         // return $sharepointUrl;
 
@@ -54,7 +54,7 @@ class SharePointController extends Controller
             return response()->json(['error' => $data['error']], 500);
         }
 
-        return response()->json($data['d']['results']);
+        return response()->json($data);
     }
 
     // public function getImageFromDrive(Request $request)

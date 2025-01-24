@@ -57,15 +57,25 @@ class SharePointService
 
     public function fetchData($accessToken, $sharepointUrl)
     {
+        $allData = [];
         try {
-            $response = $this->client->get($sharepointUrl, [
-                'headers' => [
-                    'Authorization' => "Bearer {$accessToken}",
-                    'Accept' => 'application/json;odata=verbose',
-                ],
-            ]);
+            do {
+                $response = $this->client->get($sharepointUrl, [
+                    'headers' => [
+                        'Authorization' => "Bearer {$accessToken}",
+                        'Accept' => 'application/json;odata=verbose',
+                    ],
+                ]);
 
-            return json_decode($response->getBody()->getContents(), true);
+                $data = json_decode($response->getBody()->getContents(), true);
+                if (isset($data['d']['results'])) {
+                    $allData = array_merge($allData, $data['d']['results']);
+                }
+
+                $sharepointUrl = $data['d']['__next'] ?? null;
+            } while ($sharepointUrl);
+
+            return $allData;
         } catch (RequestException $e) {
             // Handle exceptions or errors
             return ['error' => $e->getMessage()];
