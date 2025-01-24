@@ -110,18 +110,20 @@ class SharePointController extends Controller
 
         $path = storage_path("app/public/mapImages/{$id}");
 
-        if (file_exists($path)) {
-            return response()->file($path, [
-                'Content-Type' => 'image/jpeg',
-                'Content-Disposition' => "inline; filename='{$id}'"
-            ]);
+        $this->getImageFromLocal($id, $path);
+
+        if (strpos($imagePath, 'FacultyDataImages') !== false) {
+            $refreshToken = env('GENSAN_SHAREPOINT_REFRESH_TOKEN');
+            $urlSharepoint = "https://msugensan2.sharepoint.com/sites/msugensan/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
+            $tokens = $this->sharePointService->getAccessToken($refreshToken, 'msugensan2.sharepoint.com');
+
+        } else {
+            $refreshToken = env('NAAWAN_SHAREPOINT_REFRESH_TOKEN');
+            $urlSharepoint = "https://msuatnaawan.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
+            $tokens = $this->sharePointService->getAccessToken($refreshToken);
         }
 
-        // Assume you have the refresh token stored in your application
-        $refreshToken = $this->refreshToken;
-
         // Get the access token
-        $tokens = $this->sharePointService->getAccessToken($refreshToken);
 
         if (isset($tokens['error'])) {
             return response()->json(['error' => $tokens['error']], 500);
@@ -130,7 +132,8 @@ class SharePointController extends Controller
         $response = Http::withHeaders([
             'Authorization' => "Bearer {$tokens['access_token']}", // Add your access token
             'Accept' => 'application/json',
-        ])->get("https://msuatnaawan.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value");
+        ])->get($urlSharepoint);
+
 
         if ($response->successful()) {
 
@@ -144,6 +147,16 @@ class SharePointController extends Controller
                 ->header('Content-Type', 'image/jpeg'); // Adjust depending on the image type
         } else {
             return response()->json(['error' => 'Failed to fetch the image from SharePoint'], 500);
+        }
+    }
+
+    public function getImageFromLocal($id, $path)
+    {
+        if (file_exists($path)) {
+            return response()->file($path, [
+                'Content-Type' => 'image/jpeg',
+                'Content-Disposition' => "inline; filename='{$id}'"
+            ]);
         }
     }
 
