@@ -108,16 +108,20 @@ class SharePointController extends Controller
 
         $url = "{$imagePath}{$id}";
 
-        $path = storage_path("app/public/mapImages/{$id}");
 
-        $this->getImageFromLocal($id, $path);
 
         if (strpos($imagePath, 'FacultyDataImages') !== false) {
+            $path = storage_path("app/public/mapImages/{$id}");
+            $this->getImageFromLocal($id, $path);
+
             $refreshToken = env('GENSAN_SHAREPOINT_REFRESH_TOKEN');
             $urlSharepoint = "https://msugensan2.sharepoint.com/sites/msugensan/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
             $tokens = $this->sharePointService->getAccessToken($refreshToken, 'msugensan2.sharepoint.com');
 
         } else {
+            $path = storage_path("app/public/facultyData/{$id}");
+            $this->getImageFromLocal($id, $path);
+
             $refreshToken = env('NAAWAN_SHAREPOINT_REFRESH_TOKEN');
             $urlSharepoint = "https://msuatnaawan.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
             $tokens = $this->sharePointService->getAccessToken($refreshToken);
@@ -136,12 +140,16 @@ class SharePointController extends Controller
 
 
         if ($response->successful()) {
-
-            Storage::disk('public')->put("mapImages/{$id}", $response->body());
-
-            if (!file_exists($path)) {
-                return response()->json(['error' => 'File could not be saved'], 500);
+            
+            if (strpos($imagePath, 'FacultyDataImages') !== false) {
+                Storage::disk('public')->put("facultyData/{$id}", $response->body());
+            } else {
+                Storage::disk('public')->put("mapImages/{$id}", $response->body());
             }
+
+            // if (!file_exists($path)) {
+            //     return response()->json(['error' => 'File could not be saved'], 500);
+            // }
 
             return response($response->body(), 200)
                 ->header('Content-Type', 'image/jpeg'); // Adjust depending on the image type
