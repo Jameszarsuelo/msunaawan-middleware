@@ -162,23 +162,38 @@ class SharePointController extends Controller
 
     public function getEvents()
     {
-        // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,BodyText,WPLink,EventListName,ImageURL&\$filter=DisplayToPublic eq 1";
+        // $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items?&\$select=Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,BodyText,WPLink,EventListName,ImageURL&\$filter=DisplayToPublic eq 1";
 
-        $result = $this->sharepointData($sharepointUrl);
+        $sharepointUrl = [
+            "baseUrl" => "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Events')/items",
+            "queryParams" => [
+                "select" => "Title,Description,Location,ContentTypeId,EventDate,EndDate,ItemLink,BodyText,WPLink,EventListName,ImageURL",
+                "filter" => "DisplayToPublic eq 1"
+            ],
+        ];
 
-        return response()->json($result['d']['results']);
+        $data = $this->getDataFromResponse($sharepointUrl);
+
+        return $data;
 
     }
 
     public function getNews()
     {
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
-        $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('News')/items?&\$select=Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink&\$filter=DisplayToPublic eq 1";
+        // $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('News')/items?&\$select=Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink&\$filter=DisplayToPublic eq 1";
 
-        $result = $this->sharepointData($sharepointUrl);
+        $sharepointUrl = [
+            "baseUrl" => "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('News')/items",
+            "queryParams" => [
+                "select" => "Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink",
+                "filter" => "DisplayToPublic eq 1"
+            ],
+        ];
 
-        return response()->json($result['d']['results']);
+        $data = $this->getDataFromResponse($sharepointUrl);
+
+        return $data;
 
     }
 
@@ -187,9 +202,18 @@ class SharePointController extends Controller
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
         $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Announcements')/items?&\$select=Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink&\$filter=DisplayToPublic eq 1";
 
-        $result = $this->sharepointData($sharepointUrl);
+        $sharepointUrl = [
+            "baseUrl" => "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Announcements')/items",
+            "queryParams" => [
+                "select" => "Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink",
+                "filter" => "DisplayToPublic eq 1"
+            ],
+        ];
 
-        return response()->json($result['d']['results']);
+        $data = $this->getDataFromResponse($sharepointUrl);
+
+
+        return $data;
 
     }
 
@@ -198,10 +222,33 @@ class SharePointController extends Controller
         // $sharepointUrl = "https://msuatnaawan.sharepoint.com/_api/web/lists/GetByTitle('Events')/items?select=Title,Location,Description,EventDate,EndDate";
         $sharepointUrl = "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Research')/items?&\$select=Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink&\$filter=DisplayToPublic eq 1";
 
-        $result = $this->sharepointData($sharepointUrl);
+        $sharepointUrl = [
+            "baseUrl" => "https://msuatnaawan.sharepoint.com/sites/MSUatNaawan/_api/web/lists/GetByTitle('Research')/items",
+            "queryParams" => [
+                "select" => "Title,Description,ImageURL,Created,ItemLink,BodyText,WPLink",
+                "filter" => "DisplayToPublic eq 1"
+            ],
+        ];
 
-        return response()->json($result['d']['results']);
+        $data = $this->getDataFromResponse($sharepointUrl);
 
+        return $data;
+
+    }
+
+    public function getDataFromResponse($sharepointUrl)
+    {
+        // Create a new Laravel request instance with the given data
+        $request = new Request($sharepointUrl);
+
+        // Call the getData function
+        $response = $this->getData($request);
+
+        // Convert response to array
+        $responseData = $response->getData(true);
+
+        // Debug the response data structure
+        return response()->json($responseData);
     }
 
     public function getUsers()
