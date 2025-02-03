@@ -110,8 +110,8 @@ class SharePointController extends Controller
 
 
 
-        if (strpos($imagePath, 'FacultyDataImages') !== false) {
-            $path = storage_path("app/public/mapImages/{$id}");
+        if (strpos($imagePath, 'FacultyDataImages') !== false || strpos($imagePath, 'MSUGensan Building Images') !== false) {
+            $path = storage_path("app/public/facultyData/{$id}");
             $this->getImageFromLocal($id, $path);
 
             $refreshToken = env('GENSAN_SHAREPOINT_REFRESH_TOKEN');
@@ -119,7 +119,7 @@ class SharePointController extends Controller
             $tokens = $this->sharePointService->getAccessToken($refreshToken, 'msugensan2.sharepoint.com');
 
         } else {
-            $path = storage_path("app/public/facultyData/{$id}");
+            $path = storage_path("app/public/mapImages/{$id}");
             $this->getImageFromLocal($id, $path);
 
             $refreshToken = env('NAAWAN_SHAREPOINT_REFRESH_TOKEN');
