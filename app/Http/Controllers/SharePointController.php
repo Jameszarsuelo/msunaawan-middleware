@@ -37,6 +37,8 @@ class SharePointController extends Controller
             $this->refreshToken = env('NAAWAN_SHAREPOINT_REFRESH_TOKEN');
         } else if (strpos($baseUrl, 'msugensan2.sharepoint.com') !== false) {
             $this->refreshToken = env('GENSAN_SHAREPOINT_REFRESH_TOKEN');
+        } else if (strpos($baseUrl, 'msusulu1974.sharepoint.com') !== false) {
+            $this->refreshToken = env('SULU_SHAREPOINT_REFRESH_TOKEN');
         }
 
         $refreshToken = $this->refreshToken;

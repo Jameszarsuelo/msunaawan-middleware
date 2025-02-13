@@ -25,6 +25,11 @@ class SharePointService
             $this->clientId = env('GENSAN_SHAREPOINT_CLIENT_ID');
             $this->clientSecret = env('GENSAN_SHAREPOINT_CLIENT_SECRET');
             $this->scope = env('GENSAN_SHAREPOINT_SCOPE');
+        } else if (strpos($baseUrl, 'msusulu1974.sharepoint.com') !== false) {
+            $this->tenantId = env('SULU_SHAREPOINT_TENANT_ID');
+            $this->clientId = env('SULU_SHAREPOINT_CLIENT_ID');
+            $this->clientSecret = env('SULU_SHAREPOINT_CLIENT_SECRET');
+            $this->scope = env('SULU_SHAREPOINT_SCOPE');
         } else {
             $this->tenantId = env('NAAWAN_SHAREPOINT_TENANT_ID');
             $this->clientId = env('NAAWAN_SHAREPOINT_CLIENT_ID');
