@@ -16,3 +16,4 @@ Route::get('getResearch', [SharePointController::class, 'getResearch']);
 Route::get('getUsers', [SharePointController::class, 'getUsers']);
 Route::post('getImageFromDrive', [SharePointController::class, 'getImageFromDrive']);
 Route::post('getImageFromSharepoint', [SharePointController::class, 'getImageFromSharepoint']);
+Route::post('getVideoFromSharepoint', [SharePointController::class, 'getVideoFromSharepoint']);

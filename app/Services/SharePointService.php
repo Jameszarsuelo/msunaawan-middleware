@@ -18,24 +18,13 @@ class SharePointService
         $this->client = new Client();
     }
 
-    public function getAccessToken($refreshToken, $baseUrl = null)
+    public function getAccessToken($refreshToken, $tenantName = null)
     {
-        if (strpos($baseUrl, 'msugensan2.sharepoint.com') !== false) {
-            $this->tenantId = env('GENSAN_SHAREPOINT_TENANT_ID');
-            $this->clientId = env('GENSAN_SHAREPOINT_CLIENT_ID');
-            $this->clientSecret = env('GENSAN_SHAREPOINT_CLIENT_SECRET');
-            $this->scope = env('GENSAN_SHAREPOINT_SCOPE');
-        } else if (strpos($baseUrl, 'msusulu1974.sharepoint.com') !== false) {
-            $this->tenantId = env('SULU_SHAREPOINT_TENANT_ID');
-            $this->clientId = env('SULU_SHAREPOINT_CLIENT_ID');
-            $this->clientSecret = env('SULU_SHAREPOINT_CLIENT_SECRET');
-            $this->scope = env('SULU_SHAREPOINT_SCOPE');
-        } else {
-            $this->tenantId = env('NAAWAN_SHAREPOINT_TENANT_ID');
-            $this->clientId = env('NAAWAN_SHAREPOINT_CLIENT_ID');
-            $this->clientSecret = env('NAAWAN_SHAREPOINT_CLIENT_SECRET');
-            $this->scope = env('NAAWAN_SHAREPOINT_SCOPE');
-        }
+
+        $this->tenantId = env("{$tenantName}_SHAREPOINT_TENANT_ID");
+        $this->clientId = env("{$tenantName}_SHAREPOINT_CLIENT_ID");
+        $this->clientSecret = env("{$tenantName}_SHAREPOINT_CLIENT_SECRET");
+        $this->scope = env("{$tenantName}_SHAREPOINT_SCOPE");
 
         try {
             $response = $this->client->post("https://login.microsoftonline.com/{$this->tenantId}/oauth2/v2.0/token", [
@@ -62,20 +51,18 @@ class SharePointService
 
     public function fetchData($accessToken, $sharepointUrl)
     {
-        $allData = [];
         try {
-                $response = $this->client->get($sharepointUrl, [
-                    'headers' => [
-                        'Authorization' => "Bearer {$accessToken}",
-                        'Accept' => 'application/json;odata=verbose',
-                    ],
-                ]);
+            $response = $this->client->get($sharepointUrl, [
+                'headers' => [
+                    'Authorization' => "Bearer {$accessToken}",
+                    'Accept' => 'application/json;odata=verbose',
+                ],
+            ]);
 
-                $data = json_decode($response->getBody()->getContents(), true);
+            $data = json_decode($response->getBody()->getContents(), true);
 
             return $data['d']['results'];
         } catch (RequestException $e) {
-            // Handle exceptions or errors
             return ['error' => $e->getMessage()];
         }
     }
