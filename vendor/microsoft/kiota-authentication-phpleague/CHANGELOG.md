@@ -5,11 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.5.0](https://github.com/microsoft/kiota-php/compare/microsoft-kiota-authentication-phpleague-v1.4.0...microsoft-kiota-authentication-phpleague-v1.5.0) (2025-02-10)
 
-### Added
+
+### Features
+
+* add release please configuration to monorepo ([57de3a2](https://github.com/microsoft/kiota-php/commit/57de3a20091d1cd349d3c4b0e840920ac3a57d75))
+
+## [1.3.1] - 2024-11-27
 
 ### Changed
+
+- Makes cache keys reproducible in Delegated permission contexts
+- Makes auth code optional to support cases when AuthCodeContext is used with an already cached token
+
+## [1.3.0] - 2024-11-14
+
+### Changed
+- Fix caching access tokens for delegated permissions. [#98](https://github.com/microsoft/kiota-authentication-phpleague-php/pull/98)
+
+## [1.2.0]
+
+### Added
+- Add client options to the `ProviderFactory::create` by @SilasKenneth in https://github.com/microsoft/kiota-authentication-phpleague-php/pull/88
 
 ## [1.1.0]
 

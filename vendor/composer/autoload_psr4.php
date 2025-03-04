@@ -73,6 +73,7 @@ return array(
     'Microsoft\\Kiota\\Abstractions\\' => array($vendorDir . '/microsoft/kiota-abstractions/src'),
     'Microsoft\\Graph\\Core\\' => array($vendorDir . '/microsoft/microsoft-graph-core/src'),
     'Microsoft\\Graph\\' => array($vendorDir . '/microsoft/microsoft-graph/src'),
+    'League\\Uri\\' => array($vendorDir . '/league/uri', $vendorDir . '/league/uri-interfaces'),
     'League\\OAuth2\\Client\\' => array($vendorDir . '/league/oauth2-client/src'),
     'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Flysystem\\Local\\' => array($vendorDir . '/league/flysystem-local'),

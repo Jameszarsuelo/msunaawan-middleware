@@ -79,7 +79,7 @@ class ServicePrincipal extends DirectoryObject implements Parsable
     }
 
     /**
-     * Gets the appDisplayName property value. The display name exposed by the associated application.
+     * Gets the appDisplayName property value. The display name exposed by the associated application. Maximum length is 256 characters.
      * @return string|null
     */
     public function getAppDisplayName(): ?string {
@@ -568,7 +568,7 @@ class ServicePrincipal extends DirectoryObject implements Parsable
     }
 
     /**
-     * Gets the owners property value. Directory objects that are owners of this servicePrincipal. The owners are a set of nonadmin users or servicePrincipals who are allowed to modify this object. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
+     * Gets the owners property value. Directory objects that are owners of this servicePrincipal. The owners are a set of nonadmin users or servicePrincipals who are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
      * @return array<DirectoryObject>|null
     */
     public function getOwners(): ?array {
@@ -894,7 +894,7 @@ class ServicePrincipal extends DirectoryObject implements Parsable
     }
 
     /**
-     * Sets the appDisplayName property value. The display name exposed by the associated application.
+     * Sets the appDisplayName property value. The display name exposed by the associated application. Maximum length is 256 characters.
      * @param string|null $value Value to set for the appDisplayName property.
     */
     public function setAppDisplayName(?string $value): void {
@@ -1134,7 +1134,7 @@ class ServicePrincipal extends DirectoryObject implements Parsable
     }
 
     /**
-     * Sets the owners property value. Directory objects that are owners of this servicePrincipal. The owners are a set of nonadmin users or servicePrincipals who are allowed to modify this object. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
+     * Sets the owners property value. Directory objects that are owners of this servicePrincipal. The owners are a set of nonadmin users or servicePrincipals who are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
      * @param array<DirectoryObject>|null $value Value to set for the owners property.
     */
     public function setOwners(?array $value): void {

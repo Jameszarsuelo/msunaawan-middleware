@@ -46,7 +46,7 @@ class EventMessage extends Message implements Parsable
     }
 
     /**
-     * Gets the event property value. The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property.  Read-only.
+     * Gets the event property value. The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property. Read-only.
      * @return Event|null
     */
     public function getEvent(): ?Event {
@@ -90,7 +90,7 @@ class EventMessage extends Message implements Parsable
     }
 
     /**
-     * Gets the isDelegated property value. True if this meeting request is accessible to a delegate, false otherwise. Default is false.
+     * Gets the isDelegated property value. True if this meeting request is accessible to a delegate, false otherwise. The default is false.
      * @return bool|null
     */
     public function getIsDelegated(): ?bool {
@@ -200,7 +200,7 @@ class EventMessage extends Message implements Parsable
     }
 
     /**
-     * Sets the event property value. The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property.  Read-only.
+     * Sets the event property value. The event associated with the event message. The assumption for attendees or room resources is that the Calendar Attendant is set to automatically update the calendar with an event when meeting request event messages arrive. Navigation property. Read-only.
      * @param Event|null $value Value to set for the event property.
     */
     public function setEvent(?Event $value): void {
@@ -216,7 +216,7 @@ class EventMessage extends Message implements Parsable
     }
 
     /**
-     * Sets the isDelegated property value. True if this meeting request is accessible to a delegate, false otherwise. Default is false.
+     * Sets the isDelegated property value. True if this meeting request is accessible to a delegate, false otherwise. The default is false.
      * @param bool|null $value Value to set for the isDelegated property.
     */
     public function setIsDelegated(?bool $value): void {

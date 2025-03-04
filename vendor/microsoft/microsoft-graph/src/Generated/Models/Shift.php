@@ -26,7 +26,7 @@ class Shift extends ChangeTrackedEntity implements Parsable
     }
 
     /**
-     * Gets the draftShift property value. Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when they are shared, which copies the changes from the draftShift to the sharedShift property.
+     * Gets the draftShift property value. Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when they're shared, which copies the changes from the draftShift to the sharedShift property.
      * @return ShiftItem|null
     */
     public function getDraftShift(): ?ShiftItem {
@@ -45,10 +45,23 @@ class Shift extends ChangeTrackedEntity implements Parsable
         $o = $this;
         return array_merge(parent::getFieldDeserializers(), [
             'draftShift' => fn(ParseNode $n) => $o->setDraftShift($n->getObjectValue([ShiftItem::class, 'createFromDiscriminatorValue'])),
+            'isStagedForDeletion' => fn(ParseNode $n) => $o->setIsStagedForDeletion($n->getBooleanValue()),
             'schedulingGroupId' => fn(ParseNode $n) => $o->setSchedulingGroupId($n->getStringValue()),
             'sharedShift' => fn(ParseNode $n) => $o->setSharedShift($n->getObjectValue([ShiftItem::class, 'createFromDiscriminatorValue'])),
             'userId' => fn(ParseNode $n) => $o->setUserId($n->getStringValue()),
         ]);
+    }
+
+    /**
+     * Gets the isStagedForDeletion property value. The shift is marked for deletion, a process that is finalized when the schedule is shared.
+     * @return bool|null
+    */
+    public function getIsStagedForDeletion(): ?bool {
+        $val = $this->getBackingStore()->get('isStagedForDeletion');
+        if (is_null($val) || is_bool($val)) {
+            return $val;
+        }
+        throw new \UnexpectedValueException("Invalid type found in backing store for 'isStagedForDeletion'");
     }
 
     /**
@@ -94,17 +107,26 @@ class Shift extends ChangeTrackedEntity implements Parsable
     public function serialize(SerializationWriter $writer): void {
         parent::serialize($writer);
         $writer->writeObjectValue('draftShift', $this->getDraftShift());
+        $writer->writeBooleanValue('isStagedForDeletion', $this->getIsStagedForDeletion());
         $writer->writeStringValue('schedulingGroupId', $this->getSchedulingGroupId());
         $writer->writeObjectValue('sharedShift', $this->getSharedShift());
         $writer->writeStringValue('userId', $this->getUserId());
     }
 
     /**
-     * Sets the draftShift property value. Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when they are shared, which copies the changes from the draftShift to the sharedShift property.
+     * Sets the draftShift property value. Draft changes in the shift. Draft changes are only visible to managers. The changes are visible to employees when they're shared, which copies the changes from the draftShift to the sharedShift property.
      * @param ShiftItem|null $value Value to set for the draftShift property.
     */
     public function setDraftShift(?ShiftItem $value): void {
         $this->getBackingStore()->set('draftShift', $value);
+    }
+
+    /**
+     * Sets the isStagedForDeletion property value. The shift is marked for deletion, a process that is finalized when the schedule is shared.
+     * @param bool|null $value Value to set for the isStagedForDeletion property.
+    */
+    public function setIsStagedForDeletion(?bool $value): void {
+        $this->getBackingStore()->set('isStagedForDeletion', $value);
     }
 
     /**

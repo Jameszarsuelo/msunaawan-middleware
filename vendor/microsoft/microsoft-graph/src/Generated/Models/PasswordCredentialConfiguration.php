@@ -68,11 +68,12 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
             '@odata.type' => fn(ParseNode $n) => $o->setOdataType($n->getStringValue()),
             'restrictForAppsCreatedAfterDateTime' => fn(ParseNode $n) => $o->setRestrictForAppsCreatedAfterDateTime($n->getDateTimeValue()),
             'restrictionType' => fn(ParseNode $n) => $o->setRestrictionType($n->getEnumValue(AppCredentialRestrictionType::class)),
+            'state' => fn(ParseNode $n) => $o->setState($n->getEnumValue(AppManagementRestrictionState::class)),
         ];
     }
 
     /**
-     * Gets the maxLifetime property value. Value that can be used as the maximum number for setting password expiration time in days, hours, minutes or seconds. Defined in ISO 8601 format for Durations. For example, 'P4DT12H30M5S' represents a duration of four days, twelve hours, thirty minutes, and five seconds. This property is required when restriction type is set to passwordLifetime.
+     * Gets the maxLifetime property value. String value that indicates the maximum lifetime for password expiration, defined as an ISO 8601 duration. For example, P4DT12H30M5S represents four days, 12 hours, 30 minutes, and five seconds. This property is required when restrictionType is set to passwordLifetime.
      * @return DateInterval|null
     */
     public function getMaxLifetime(): ?DateInterval {
@@ -96,7 +97,7 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
     }
 
     /**
-     * Gets the restrictForAppsCreatedAfterDateTime property value. Enforces the policy for an app created on or after the enforcement date. For existing applications, the enforcement date would be back dated. To apply to all applications, enforcement datetime would be null.
+     * Gets the restrictForAppsCreatedAfterDateTime property value. Specifies the date from which the policy restriction applies to newly created applications. For existing applications, the enforcement date can be retroactively applied.
      * @return DateTime|null
     */
     public function getRestrictForAppsCreatedAfterDateTime(): ?DateTime {
@@ -108,7 +109,7 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
     }
 
     /**
-     * Gets the restrictionType property value. The type of restriction being applied. The possible values are: passwordAddition, passwordLifetime, symmetricKeyAddition, symmetricKeyLifetime,customPasswordAddition, unknownFutureValue. Each value of restrictionType can be used only once per policy.
+     * Gets the restrictionType property value. The type of restriction being applied. The possible values are: passwordAddition, passwordLifetime, symmetricKeyAddition, symmetricKeyLifetime, customPasswordAddition, and unknownFutureValue. Each value of restrictionType can be used only once per policy.
      * @return AppCredentialRestrictionType|null
     */
     public function getRestrictionType(): ?AppCredentialRestrictionType {
@@ -120,6 +121,18 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
     }
 
     /**
+     * Gets the state property value. The state property
+     * @return AppManagementRestrictionState|null
+    */
+    public function getState(): ?AppManagementRestrictionState {
+        $val = $this->getBackingStore()->get('state');
+        if (is_null($val) || $val instanceof AppManagementRestrictionState) {
+            return $val;
+        }
+        throw new \UnexpectedValueException("Invalid type found in backing store for 'state'");
+    }
+
+    /**
      * Serializes information the current object
      * @param SerializationWriter $writer Serialization writer to use to serialize this model
     */
@@ -128,6 +141,7 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
         $writer->writeStringValue('@odata.type', $this->getOdataType());
         $writer->writeDateTimeValue('restrictForAppsCreatedAfterDateTime', $this->getRestrictForAppsCreatedAfterDateTime());
         $writer->writeEnumValue('restrictionType', $this->getRestrictionType());
+        $writer->writeEnumValue('state', $this->getState());
         $writer->writeAdditionalData($this->getAdditionalData());
     }
 
@@ -148,7 +162,7 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
     }
 
     /**
-     * Sets the maxLifetime property value. Value that can be used as the maximum number for setting password expiration time in days, hours, minutes or seconds. Defined in ISO 8601 format for Durations. For example, 'P4DT12H30M5S' represents a duration of four days, twelve hours, thirty minutes, and five seconds. This property is required when restriction type is set to passwordLifetime.
+     * Sets the maxLifetime property value. String value that indicates the maximum lifetime for password expiration, defined as an ISO 8601 duration. For example, P4DT12H30M5S represents four days, 12 hours, 30 minutes, and five seconds. This property is required when restrictionType is set to passwordLifetime.
      * @param DateInterval|null $value Value to set for the maxLifetime property.
     */
     public function setMaxLifetime(?DateInterval $value): void {
@@ -164,7 +178,7 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
     }
 
     /**
-     * Sets the restrictForAppsCreatedAfterDateTime property value. Enforces the policy for an app created on or after the enforcement date. For existing applications, the enforcement date would be back dated. To apply to all applications, enforcement datetime would be null.
+     * Sets the restrictForAppsCreatedAfterDateTime property value. Specifies the date from which the policy restriction applies to newly created applications. For existing applications, the enforcement date can be retroactively applied.
      * @param DateTime|null $value Value to set for the restrictForAppsCreatedAfterDateTime property.
     */
     public function setRestrictForAppsCreatedAfterDateTime(?DateTime $value): void {
@@ -172,11 +186,19 @@ class PasswordCredentialConfiguration implements AdditionalDataHolder, BackedMod
     }
 
     /**
-     * Sets the restrictionType property value. The type of restriction being applied. The possible values are: passwordAddition, passwordLifetime, symmetricKeyAddition, symmetricKeyLifetime,customPasswordAddition, unknownFutureValue. Each value of restrictionType can be used only once per policy.
+     * Sets the restrictionType property value. The type of restriction being applied. The possible values are: passwordAddition, passwordLifetime, symmetricKeyAddition, symmetricKeyLifetime, customPasswordAddition, and unknownFutureValue. Each value of restrictionType can be used only once per policy.
      * @param AppCredentialRestrictionType|null $value Value to set for the restrictionType property.
     */
     public function setRestrictionType(?AppCredentialRestrictionType $value): void {
         $this->getBackingStore()->set('restrictionType', $value);
+    }
+
+    /**
+     * Sets the state property value. The state property
+     * @param AppManagementRestrictionState|null $value Value to set for the state property.
+    */
+    public function setState(?AppManagementRestrictionState $value): void {
+        $this->getBackingStore()->set('state', $value);
     }
 
 }

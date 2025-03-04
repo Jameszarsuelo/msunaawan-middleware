@@ -10,6 +10,7 @@ use Microsoft\Graph\Generated\Models\ODataErrors\ODataError;
 use Microsoft\Graph\Generated\Teams\Item\Channels\Item\Members\Add\AddRequestBuilder;
 use Microsoft\Graph\Generated\Teams\Item\Channels\Item\Members\Count\CountRequestBuilder;
 use Microsoft\Graph\Generated\Teams\Item\Channels\Item\Members\Item\ConversationMemberItemRequestBuilder;
+use Microsoft\Graph\Generated\Teams\Item\Channels\Item\Members\Remove\RemoveRequestBuilder;
 use Microsoft\Kiota\Abstractions\BaseRequestBuilder;
 use Microsoft\Kiota\Abstractions\HttpMethod;
 use Microsoft\Kiota\Abstractions\RequestAdapter;
@@ -32,6 +33,13 @@ class MembersRequestBuilder extends BaseRequestBuilder
     */
     public function count(): CountRequestBuilder {
         return new CountRequestBuilder($this->pathParameters, $this->requestAdapter);
+    }
+    
+    /**
+     * Provides operations to call the remove method.
+    */
+    public function remove(): RemoveRequestBuilder {
+        return new RemoveRequestBuilder($this->pathParameters, $this->requestAdapter);
     }
     
     /**
@@ -75,12 +83,12 @@ class MembersRequestBuilder extends BaseRequestBuilder
     }
 
     /**
-     * Add a conversationMember to a channel.
+     * Add a conversationMember to a channel. This operation is allowed only for channels with a membershipType value of private or shared.
      * @param ConversationMember $body The request body
      * @param MembersRequestBuilderPostRequestConfiguration|null $requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @return Promise<ConversationMember|null>
      * @throws Exception
-     * @link https://learn.microsoft.com/graph/api/conversationmember-add?view=graph-rest-1.0 Find more info here
+     * @link https://learn.microsoft.com/graph/api/channel-post-members?view=graph-rest-1.0 Find more info here
     */
     public function post(ConversationMember $body, ?MembersRequestBuilderPostRequestConfiguration $requestConfiguration = null): Promise {
         $requestInfo = $this->toPostRequestInformation($body, $requestConfiguration);
@@ -112,7 +120,7 @@ class MembersRequestBuilder extends BaseRequestBuilder
     }
 
     /**
-     * Add a conversationMember to a channel.
+     * Add a conversationMember to a channel. This operation is allowed only for channels with a membershipType value of private or shared.
      * @param ConversationMember $body The request body
      * @param MembersRequestBuilderPostRequestConfiguration|null $requestConfiguration Configuration for the request such as headers, query parameters, and middleware options.
      * @return RequestInformation

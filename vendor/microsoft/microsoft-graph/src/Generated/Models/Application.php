@@ -107,6 +107,18 @@ class Application extends DirectoryObject implements Parsable
     }
 
     /**
+     * Gets the authenticationBehaviors property value. The authenticationBehaviors property
+     * @return AuthenticationBehaviors|null
+    */
+    public function getAuthenticationBehaviors(): ?AuthenticationBehaviors {
+        $val = $this->getBackingStore()->get('authenticationBehaviors');
+        if (is_null($val) || $val instanceof AuthenticationBehaviors) {
+            return $val;
+        }
+        throw new \UnexpectedValueException("Invalid type found in backing store for 'authenticationBehaviors'");
+    }
+
+    /**
      * Gets the certification property value. Specifies the certification status of the application.
      * @return Certification|null
     */
@@ -179,7 +191,7 @@ class Application extends DirectoryObject implements Parsable
     }
 
     /**
-     * Gets the displayName property value. The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderby.
+     * Gets the displayName property value. The display name for the application. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderby.
      * @return string|null
     */
     public function getDisplayName(): ?string {
@@ -231,6 +243,7 @@ class Application extends DirectoryObject implements Parsable
             'applicationTemplateId' => fn(ParseNode $n) => $o->setApplicationTemplateId($n->getStringValue()),
             'appManagementPolicies' => fn(ParseNode $n) => $o->setAppManagementPolicies($n->getCollectionOfObjectValues([AppManagementPolicy::class, 'createFromDiscriminatorValue'])),
             'appRoles' => fn(ParseNode $n) => $o->setAppRoles($n->getCollectionOfObjectValues([AppRole::class, 'createFromDiscriminatorValue'])),
+            'authenticationBehaviors' => fn(ParseNode $n) => $o->setAuthenticationBehaviors($n->getObjectValue([AuthenticationBehaviors::class, 'createFromDiscriminatorValue'])),
             'certification' => fn(ParseNode $n) => $o->setCertification($n->getObjectValue([Certification::class, 'createFromDiscriminatorValue'])),
             'createdDateTime' => fn(ParseNode $n) => $o->setCreatedDateTime($n->getDateTimeValue()),
             'createdOnBehalfOf' => fn(ParseNode $n) => $o->setCreatedOnBehalfOf($n->getObjectValue([DirectoryObject::class, 'createFromDiscriminatorValue'])),
@@ -440,7 +453,7 @@ class Application extends DirectoryObject implements Parsable
     }
 
     /**
-     * Gets the owners property value. Directory objects that are owners of the application. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
+     * Gets the owners property value. Directory objects that are owners of this application. The owners are a set of nonadmin users or servicePrincipals who are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
      * @return array<DirectoryObject>|null
     */
     public function getOwners(): ?array {
@@ -703,6 +716,7 @@ class Application extends DirectoryObject implements Parsable
         $writer->writeStringValue('applicationTemplateId', $this->getApplicationTemplateId());
         $writer->writeCollectionOfObjectValues('appManagementPolicies', $this->getAppManagementPolicies());
         $writer->writeCollectionOfObjectValues('appRoles', $this->getAppRoles());
+        $writer->writeObjectValue('authenticationBehaviors', $this->getAuthenticationBehaviors());
         $writer->writeObjectValue('certification', $this->getCertification());
         $writer->writeDateTimeValue('createdDateTime', $this->getCreatedDateTime());
         $writer->writeObjectValue('createdOnBehalfOf', $this->getCreatedOnBehalfOf());
@@ -795,6 +809,14 @@ class Application extends DirectoryObject implements Parsable
     }
 
     /**
+     * Sets the authenticationBehaviors property value. The authenticationBehaviors property
+     * @param AuthenticationBehaviors|null $value Value to set for the authenticationBehaviors property.
+    */
+    public function setAuthenticationBehaviors(?AuthenticationBehaviors $value): void {
+        $this->getBackingStore()->set('authenticationBehaviors', $value);
+    }
+
+    /**
      * Sets the certification property value. Specifies the certification status of the application.
      * @param Certification|null $value Value to set for the certification property.
     */
@@ -843,7 +865,7 @@ class Application extends DirectoryObject implements Parsable
     }
 
     /**
-     * Sets the displayName property value. The display name for the application. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderby.
+     * Sets the displayName property value. The display name for the application. Maximum length is 256 characters. Supports $filter (eq, ne, not, ge, le, in, startsWith, and eq on null values), $search, and $orderby.
      * @param string|null $value Value to set for the displayName property.
     */
     public function setDisplayName(?string $value): void {
@@ -963,7 +985,7 @@ class Application extends DirectoryObject implements Parsable
     }
 
     /**
-     * Sets the owners property value. Directory objects that are owners of the application. Read-only. Nullable. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
+     * Sets the owners property value. Directory objects that are owners of this application. The owners are a set of nonadmin users or servicePrincipals who are allowed to modify this object. Supports $expand, $filter (/$count eq 0, /$count ne 0, /$count eq 1, /$count ne 1), and $select nested in $expand.
      * @param array<DirectoryObject>|null $value Value to set for the owners property.
     */
     public function setOwners(?array $value): void {
