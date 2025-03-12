@@ -70,6 +70,15 @@ class SharePointController extends Controller
             $urlSharepoint = "https://msugensan2.sharepoint.com/sites/msugensan/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
             $tokens = $this->sharePointService->getAccessToken($refreshToken, 'GENSAN');
 
+        } else if (
+            strpos($imagePath, 'MSUSulu Building Images') !== false
+        ) {
+            $path = storage_path("app/public/facultyData/{$id}");
+            $this->getImageFromLocal($id, $path);
+
+            $refreshToken = env('SULU_SHAREPOINT_REFRESH_TOKEN');
+            $urlSharepoint = "https://msusulu1974.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
+            $tokens = $this->sharePointService->getAccessToken($refreshToken, 'SULU');
         } else {
             $path = storage_path("app/public/mapImages/{$id}");
             $this->getImageFromLocal($id, $path);
