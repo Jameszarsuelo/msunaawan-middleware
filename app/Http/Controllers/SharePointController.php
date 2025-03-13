@@ -73,12 +73,21 @@ class SharePointController extends Controller
         } else if (
             strpos($imagePath, 'MSUSulu Building Images') !== false
         ) {
-            $path = storage_path("app/public/facultyData/{$id}");
+            $path = storage_path("app/public/mapImages/{$id}");
             $this->getImageFromLocal($id, $path);
 
             $refreshToken = env('SULU_SHAREPOINT_REFRESH_TOKEN');
             $urlSharepoint = "https://msusulu1974.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
             $tokens = $this->sharePointService->getAccessToken($refreshToken, 'SULU');
+        } else if (
+            strpos($imagePath, 'MSUTawi Building Images') !== false
+        ) {
+            $path = storage_path("app/public/mapImages/{$id}");
+            $this->getImageFromLocal($id, $path);
+
+            $refreshToken = env('TCTO_SHAREPOINT_REFRESH_TOKEN');
+            $urlSharepoint = "https://msutawitawiedu.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
+            $tokens = $this->sharePointService->getAccessToken($refreshToken, 'TCTO');
         } else {
             $path = storage_path("app/public/mapImages/{$id}");
             $this->getImageFromLocal($id, $path);
