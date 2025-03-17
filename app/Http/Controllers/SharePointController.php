@@ -60,11 +60,15 @@ class SharePointController extends Controller
         $url = "{$imagePath}{$id}";
 
         if (
-            strpos($imagePath, 'FacultyDataImages') !== false
+            strpos($imagePath, '/FacultyDataImages/') !== false
             || strpos($imagePath, 'MSUGensan Building Images') !== false
         ) {
             $path = storage_path("app/public/facultyData/{$id}");
-            $this->getImageFromLocal($id, $path);
+            $imageFromLocal = $this->getImageFromLocal($id, $path);
+
+            if ($imageFromLocal) {
+                return $imageFromLocal;
+            }
 
             $refreshToken = env('GENSAN_SHAREPOINT_REFRESH_TOKEN');
             $urlSharepoint = "https://msugensan2.sharepoint.com/sites/msugensan/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
@@ -74,23 +78,43 @@ class SharePointController extends Controller
             strpos($imagePath, 'MSUSulu Building Images') !== false
         ) {
             $path = storage_path("app/public/mapImages/{$id}");
-            $this->getImageFromLocal($id, $path);
+            $imageFromLocal = $this->getImageFromLocal($id, $path);
+
+            if ($imageFromLocal) {
+                return $imageFromLocal;
+            }
 
             $refreshToken = env('SULU_SHAREPOINT_REFRESH_TOKEN');
             $urlSharepoint = "https://msusulu1974.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
             $tokens = $this->sharePointService->getAccessToken($refreshToken, 'SULU');
         } else if (
             strpos($imagePath, 'MSUTawi Building Images') !== false
+            || strpos($imagePath, 'FacultyDataImagesTcto') !== false
         ) {
+
+            if (strpos($imagePath, '/FacultyDataImagesTcto/')) {
+                $path = storage_path("app/public/facultyDataTcto/{$id}");
+                $imageFromLocal = $this->getImageFromLocal($id, $path);
+                return $imageFromLocal;
+            }
+
             $path = storage_path("app/public/mapImages/{$id}");
-            $this->getImageFromLocal($id, $path);
+            $imageFromLocal = $this->getImageFromLocal($id, $path);
+
+            if ($imageFromLocal) {
+                return $imageFromLocal;
+            }
 
             $refreshToken = env('TCTO_SHAREPOINT_REFRESH_TOKEN');
-            $urlSharepoint = "https://msutawitawiedu.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
+            $urlSharepoint = "https://msutawitawiedu.sharepoint.com/sites/Tawitawi/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
             $tokens = $this->sharePointService->getAccessToken($refreshToken, 'TCTO');
         } else {
             $path = storage_path("app/public/mapImages/{$id}");
-            $this->getImageFromLocal($id, $path);
+            $imageFromLocal = $this->getImageFromLocal($id, $path);
+
+            if ($imageFromLocal) {
+                return $imageFromLocal;
+            }
 
             $refreshToken = env('NAAWAN_SHAREPOINT_REFRESH_TOKEN');
             $urlSharepoint = "https://msuatnaawan.sharepoint.com/_api/web/GetFileByServerRelativeUrl('$url')/\$value";
@@ -111,8 +135,10 @@ class SharePointController extends Controller
 
         if ($response->successful()) {
 
-            if (strpos($imagePath, 'FacultyDataImages') !== false) {
+            if (strpos($imagePath, '/FacultyDataImages/') !== false) {
                 Storage::disk('public')->put("facultyData/{$id}", $response->body());
+            } else if (strpos($imagePath, '/FacultyDataImagesTcto/') !== false) {
+                Storage::disk('public')->put("facultyDataTcto/{$id}", $response->body());
             } else {
                 Storage::disk('public')->put("mapImages/{$id}", $response->body());
             }
