@@ -95,14 +95,16 @@ class SharePointController extends Controller
             if (strpos($imagePath, '/FacultyDataImagesTcto/')) {
                 $path = storage_path("app/public/facultyDataTcto/{$id}");
                 $imageFromLocal = $this->getImageFromLocal($id, $path);
-                return $imageFromLocal;
+                if ($imageFromLocal) {
+                    return $imageFromLocal;
+                }
             }
 
             $path = storage_path("app/public/mapImages/{$id}");
-            $imageFromLocal = $this->getImageFromLocal($id, $path);
+            $imageFromMapLocal = $this->getImageFromLocal($id, $path);
 
-            if ($imageFromLocal) {
-                return $imageFromLocal;
+            if ($imageFromMapLocal) {
+                return $imageFromMapLocal;
             }
 
             $refreshToken = env('TCTO_SHAREPOINT_REFRESH_TOKEN');
